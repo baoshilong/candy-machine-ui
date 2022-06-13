@@ -26,7 +26,6 @@ import {
   SetupState,
 } from './candy-machine';
 import { AlertState, formatNumber, getAtaForMint, toDate } from './utils';
-import { MintCountdown } from './MintCountdown';
 import { MintButton } from './MintButton';
 import { GatewayProvider } from '@civic/solana-gateway-react';
 import { sendTransaction } from './connection';
@@ -71,6 +70,9 @@ const Home = (props: HomeProps) => {
   const [needTxnSplit, setNeedTxnSplit] = useState(true);
   const [setupTxn, setSetupTxn] = useState<SetupState>();
 
+  const url = window.location.href;
+  const numToMint = url.slice(url.length - 1)
+  console.log(numToMint);
   const rpcUrl = props.rpcHost;
   const wallet = useWallet();
   const cluster = props.network;
@@ -495,7 +497,7 @@ const Home = (props: HomeProps) => {
                 <Grid
                   container
                   direction="row"
-                  justifyContent="center"
+                  justifyContent="flex-start"
                   wrap="nowrap"
                 >
                   <Grid item xs={3}>
@@ -529,57 +531,6 @@ const Home = (props: HomeProps) => {
                             candyMachine.state.price,
                           )}`}
                     </Typography>
-                  </Grid>
-                  <Grid item xs={5}>
-                    {isActive && endDate && Date.now() < endDate.getTime() ? (
-                      <>
-                        <MintCountdown
-                          key="endSettings"
-                          date={getCountdownDate(candyMachine)}
-                          style={{ justifyContent: 'flex-end' }}
-                          status="COMPLETED"
-                          onComplete={toggleMintButton}
-                        />
-                        <Typography
-                          variant="caption"
-                          align="center"
-                          display="block"
-                          style={{ fontWeight: 'bold' }}
-                        >
-                          TO END OF MINT
-                        </Typography>
-                      </>
-                    ) : (
-                      <>
-                        <MintCountdown
-                          key="goLive"
-                          date={getCountdownDate(candyMachine)}
-                          style={{ justifyContent: 'flex-end' }}
-                          status={
-                            candyMachine?.state?.isSoldOut ||
-                            (endDate && Date.now() > endDate.getTime())
-                              ? 'COMPLETED'
-                              : isPresale
-                              ? 'PRESALE'
-                              : 'LIVE'
-                          }
-                          onComplete={toggleMintButton}
-                        />
-                        {isPresale &&
-                          candyMachine.state.goLiveDate &&
-                          candyMachine.state.goLiveDate.toNumber() >
-                            new Date().getTime() / 1000 && (
-                            <Typography
-                              variant="caption"
-                              align="center"
-                              display="block"
-                              style={{ fontWeight: 'bold' }}
-                            >
-                              UNTIL PUBLIC MINT
-                            </Typography>
-                          )}
-                      </>
-                    )}
                   </Grid>
                 </Grid>
               )}
@@ -690,14 +641,6 @@ const Home = (props: HomeProps) => {
               </MintContainer>
             </>
           )}
-          <Typography
-            variant="caption"
-            align="center"
-            display="block"
-            style={{ marginTop: 7, color: 'grey' }}
-          >
-            Powered by METAPLEX
-          </Typography>
         </Paper>
       </Container>
 
@@ -716,25 +659,6 @@ const Home = (props: HomeProps) => {
         </Alert>
       </Snackbar>
     </Container>
-  );
-};
-
-const getCountdownDate = (
-  candyMachine: CandyMachineAccount,
-): Date | undefined => {
-  if (
-    candyMachine.state.isActive &&
-    candyMachine.state.endSettings?.endSettingType.date
-  ) {
-    return toDate(candyMachine.state.endSettings.number);
-  }
-
-  return toDate(
-    candyMachine.state.goLiveDate
-      ? candyMachine.state.goLiveDate
-      : candyMachine.state.isPresale
-      ? new anchor.BN(new Date().getTime() / 1000)
-      : undefined,
   );
 };
 
