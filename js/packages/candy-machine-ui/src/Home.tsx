@@ -351,6 +351,7 @@ const Home = (props: HomeProps) => {
           afterTransactions,
           setupMint ?? setupTxn,
         );
+        localStorage.setItem('mint result', JSON.stringify(mintResult));
 
         let status: any = { err: true };
         let metadataStatus = null;
@@ -368,6 +369,7 @@ const Home = (props: HomeProps) => {
               'processed',
             );
           console.log('Metadata status: ', !!metadataStatus);
+
         }
 
         if (status && !status.err && metadataStatus) {
