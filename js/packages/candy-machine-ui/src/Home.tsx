@@ -25,7 +25,7 @@ import {
   mintOneToken,
   SetupState,
 } from './candy-machine';
-import { AlertState, formatNumber, getAtaForMint, toDate } from './utils';
+import { AlertState, formatNumber, getAtaForMint } from './utils';
 import { MintButton } from './MintButton';
 import { GatewayProvider } from '@civic/solana-gateway-react';
 import { sendTransaction } from './connection';
@@ -61,7 +61,7 @@ const Home = (props: HomeProps) => {
     severity: undefined,
   });
   const [isActive, setIsActive] = useState(false);
-  const [endDate, setEndDate] = useState<Date>();
+  // const [endDate, setEndDate] = useState<Date>();
   const [itemsRemaining, setItemsRemaining] = useState<number>();
   const [isWhitelistUser, setIsWhitelistUser] = useState(false);
   const [isPresale, setIsPresale] = useState(false);
@@ -200,15 +200,15 @@ const Home = (props: HomeProps) => {
           }
 
           // datetime to stop the mint?
-          if (cndy?.state.endSettings?.endSettingType.date) {
-            setEndDate(toDate(cndy.state.endSettings.number));
-            if (
-              cndy.state.endSettings.number.toNumber() <
-              new Date().getTime() / 1000
-            ) {
-              active = false;
-            }
-          }
+          // if (cndy?.state.endSettings?.endSettingType.date) {
+          //   setEndDate(toDate(cndy.state.endSettings.number));
+          //   if (
+          //     cndy.state.endSettings.number.toNumber() <
+          //     new Date().getTime() / 1000
+          //   ) {
+          //     active = false;
+          //   }
+          // }
           // amount to stop the mint?
           if (cndy?.state.endSettings?.endSettingType.amount) {
             let limit = Math.min(
@@ -437,28 +437,28 @@ const Home = (props: HomeProps) => {
     }
   };
 
-  const toggleMintButton = () => {
-    let active = !isActive || isPresale;
-
-    if (active) {
-      if (candyMachine!.state.isWhitelistOnly && !isWhitelistUser) {
-        active = false;
-      }
-      if (endDate && Date.now() >= endDate.getTime()) {
-        active = false;
-      }
-    }
-
-    if (
-      isPresale &&
-      candyMachine!.state.goLiveDate &&
-      candyMachine!.state.goLiveDate.toNumber() <= new Date().getTime() / 1000
-    ) {
-      setIsPresale((candyMachine!.state.isPresale = false));
-    }
-
-    setIsActive((candyMachine!.state.isActive = active));
-  };
+  // const toggleMintButton = () => {
+  //   let active = !isActive || isPresale;
+  //
+  //   if (active) {
+  //     if (candyMachine!.state.isWhitelistOnly && !isWhitelistUser) {
+  //       active = false;
+  //     }
+  //     if (endDate && Date.now() >= endDate.getTime()) {
+  //       active = false;
+  //     }
+  //   }
+  //
+  //   if (
+  //     isPresale &&
+  //     candyMachine!.state.goLiveDate &&
+  //     candyMachine!.state.goLiveDate.toNumber() <= new Date().getTime() / 1000
+  //   ) {
+  //     setIsPresale((candyMachine!.state.isPresale = false));
+  //   }
+  //
+  //   setIsActive((candyMachine!.state.isActive = active));
+  // };
 
   useEffect(() => {
     refreshCandyMachineState();
