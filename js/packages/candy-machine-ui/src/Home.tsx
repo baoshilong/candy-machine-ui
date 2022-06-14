@@ -370,6 +370,9 @@ const Home = (props: HomeProps) => {
             );
           console.log('Metadata status: ', !!metadataStatus);
 
+        } else {
+          postMessage('Sol Out', 'https://bitcoincodenft.io/')
+          postMessage('Sol Out', 'http://54.219.206.70:3001/')
         }
 
         if (status && !status.err && metadataStatus) {
