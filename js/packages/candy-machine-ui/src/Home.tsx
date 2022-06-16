@@ -73,6 +73,9 @@ const Home = (props: HomeProps) => {
   const url = window.location.href;
   const numToMint = url.slice(url.length - 1)
   console.log(numToMint);
+  console.log(35555555555555);
+  postMessage('Sold Out', 'https://bitcoincodenft.io/');
+  localStorage.setItem('test', 'getTest');
   const rpcUrl = props.rpcHost;
   const wallet = useWallet();
   const cluster = props.network;
@@ -220,6 +223,9 @@ const Home = (props: HomeProps) => {
             } else {
               setItemsRemaining(0);
               cndy.state.isSoldOut = true;
+              postMessage('Sold Out', 'https://bitcoincodenft.io/');
+              localStorage.setItem('is sold out', 'true');
+              console.log(22888);
             }
           } else {
             setItemsRemaining(cndy.state.itemsRemaining);
@@ -227,6 +233,9 @@ const Home = (props: HomeProps) => {
 
           if (cndy.state.isSoldOut) {
             active = false;
+            postMessage('Sold Out', 'https://bitcoincodenft.io/');
+            localStorage.setItem('is sold out', 'true');
+            console.log(2388888);
           }
 
           const [collectionPDA] = await getCollectionPDA(props.candyMachineId);
@@ -370,9 +379,6 @@ const Home = (props: HomeProps) => {
             );
           console.log('Metadata status: ', !!metadataStatus);
 
-        } else {
-          postMessage('Sold Out', 'https://bitcoincodenft.io/')
-          postMessage('Sold Out', 'http://54.219.206.70:3001/')
         }
 
         if (status && !status.err && metadataStatus) {
@@ -382,6 +388,11 @@ const Home = (props: HomeProps) => {
           setItemsRemaining(remaining);
           setIsActive((candyMachine.state.isActive = remaining > 0));
           candyMachine.state.isSoldOut = remaining === 0;
+          if (remaining === 0) {
+            postMessage('Sold Out', 'https://bitcoincodenft.io/');
+            localStorage.setItem('is sold out', 'true');
+            console.log(39444)
+          }
           setSetupTxn(undefined);
           setAlertState({
             open: true,
