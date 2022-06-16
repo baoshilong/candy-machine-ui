@@ -53,6 +53,8 @@ export const MintButton = ({
       candyMachine?.state.isWhitelistOnly
     ) {
       return 'WHITELIST MINT';
+    } else if (!isActive) {
+      return 'LOADING...';
     }
 
     return 'MINT';
